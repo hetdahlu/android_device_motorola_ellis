@@ -6,6 +6,10 @@
 #
 
 LOCAL_PATH := device/motorola/ellis
+
+# Dynamic Partitions
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
 # A/B
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
@@ -15,17 +19,17 @@ AB_OTA_POSTINSTALL_CONFIG += \
 
 # Boot control HAL
 PRODUCT_PACKAGES += \
-    android.hardware.boot@1.0-impl \
-    android.hardware.boot@1.0-service
+    android.hardware.boot@1.2-service \
+    android.hardware.boot@1.2-mtkimpl \
+    android.hardware.boot@1.2-mtkimpl.recovery
+
+PRODUCT_PACKAGES_DEBUG += \
+    bootctrl \
+    update_engine_client
 
 PRODUCT_PACKAGES += \
-    bootctrl.mt6765
-
-PRODUCT_STATIC_BOOT_CONTROL_HAL := \
     bootctrl.mt6765 \
-    libgptutils \
-    libz \
-    libcutils
+    bootctrl.mt6765.recovery
 
 PRODUCT_PACKAGES += \
     otapreopt_script \
@@ -33,3 +37,18 @@ PRODUCT_PACKAGES += \
     update_engine \
     update_verifier \
     update_engine_sideload
+
+# MTK PlPath Utils
+PRODUCT_PACKAGES += \
+    mtk_plpath_utils.recovery
+
+# Additional Libraries
+TARGET_RECOVERY_DEVICE_MODULES += \
+    libkeymaster4 \
+    libkeymaster41 \
+    libpuresoftkeymasterdevice
+
+RECOVERY_LIBRARY_SOURCE_FILES += \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster41.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so
